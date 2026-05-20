@@ -164,7 +164,7 @@ router.get('/', async (req, res) => {
 
     } catch (error) {
         console.error('GET /subjects error: ', error);
-        res.status(400).json({ error: "Failed to get subjects" });
+        res.status(500).json({ error: "Failed to get subjects" });
     }
 });
 
