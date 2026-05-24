@@ -8,7 +8,6 @@ import {
   primaryKey,
   text,
   timestamp,
-  unique,
   varchar,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
@@ -82,11 +81,10 @@ export const classes = pgTable(
   ],
 );
 
-// Enrollments table
+// Enrollments table (composite PK: one row per student per class)
 export const enrollments = pgTable(
   "enrollments",
   {
-    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
     studentId: text("student_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
@@ -97,10 +95,6 @@ export const enrollments = pgTable(
   },
   (table) => [
     primaryKey({ columns: [table.studentId, table.classId] }),
-    unique("enrollments_student_id_class_id_unique").on(
-      table.studentId,
-      table.classId,
-    ),
     index("enrollments_student_id_idx").on(table.studentId),
     index("enrollments_class_id_idx").on(table.classId),
   ],
