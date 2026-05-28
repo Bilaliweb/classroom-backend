@@ -17,14 +17,17 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
             case 'admin':
                 limit = 20
                 message = 'Admin request limit 20 exceeded. Please wait'
+                break;
             
             case 'teacher':
                 limit = 15
                 message = 'Teacher request limit 15 exceeded. Please wait'
+                break;
 
             case 'student':
                 limit = 10
                 message = 'Student request limit 10 exceeded. Please wait'
+                break;
 
             default:
                 limit = 5
@@ -51,13 +54,14 @@ const securityMiddleware = async (req: Request, res: Response, next: NextFunctio
 
         // Responses based on different reasons
         if(decision.isDenied() && decision.reason.isBot()) {
-            return res.send(403).json({ error: 'Forbidden', message: 'Automated requests are not allowed' })
+            return res.status(403).json({ error: 'Forbidden', message: 'Automated requests are not allowed' })
         }
         if(decision.isDenied() && decision.reason.isShield()) {
-            return res.send(403).json({ error: 'Forbidden', message: 'Request blocked by security policy' })
+            return res.status(403).json({ error: 'Forbidden', message: 'Request blocked by security policy' })
         }
         if(decision.isDenied() && decision.reason.isRateLimit()) {
-            return res.send(403).json({ error: 'Too Many Requests', message })
+            // Status 429 is standard code for too many requests
+            return res.status(429).json({ error: 'Too Many Requests', message })
         }
 
         // If validations are successful, middleware can approve to go to next steps
