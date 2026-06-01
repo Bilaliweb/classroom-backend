@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "dotenv-types-generator && tsx watch src/index.ts",
-    "build": "dotenv-types-generator && tsc",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "dev:local": "dotenv-types-generator && tsx watch src/index.ts",
+    "build:local": "dotenv-types-generator && tsc",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:generate": "drizzle-kit generate",
