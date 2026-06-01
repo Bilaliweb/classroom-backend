@@ -9,8 +9,10 @@
     // "moduleResolution": "node",
     
     /* Node ESM - UPDATED FOR TS 6.0+ */
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    // "module": "NodeNext",
+    // "moduleResolution": "NodeNext",
+    "module": "ES2022",
+    "moduleResolution": "node",
 
     /* Project structure */
     "rootDir": "src",
