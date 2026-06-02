@@ -1,9 +1,11 @@
 import AgentAPI from "apminsight";
-AgentAPI.config()
+AgentAPI.config();
 
 import express from "express";
 import subjectsRoute from "./routes/subjects.js";
-import cors from 'cors';
+import usersRoute from "./routes/users.js";
+import classesRoute from "./routes/classes.js";
+import cors from "cors";
 import securityMiddleware from "./middleware/security.js";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
@@ -11,19 +13,21 @@ import { auth } from "./lib/auth.js";
 const app = express();
 const PORT = 8000;
 
-if(!process.env.FRONTEND_URL) {
-  throw new Error('Origin not found from env.')
+if (!process.env.FRONTEND_URL) {
+  throw new Error("Origin not found from env.");
 }
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  methods: ['GET', 'PUT', 'POST', 'DELETE'],
-  // For allowing cookies
-  credentials: true, 
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "PUT", "POST", "DELETE"],
+    // For allowing cookies
+    credentials: true,
+  }),
+);
 
 // Use splat as per new rules for express v5 or above
-app.all('/api/auth/*splat', toNodeHandler(auth));
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
 
@@ -33,7 +37,9 @@ app.get("/", (req, res) => {
   res.send("Classroom API is running.");
 });
 
-app.use("/api/subjects", subjectsRoute)
+app.use("/api/subjects", subjectsRoute);
+app.use("/api/users", usersRoute);
+app.use("/api/classes", classesRoute);
 
 app.listen(PORT, () => {
   console.log(`Server ready at http://localhost:${PORT}`);
